@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ماجراجویی در جزیره معماها - ریاضی هفتم</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px dashed var(--card-border);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        header h1 {
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .meta-box {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 8px 12px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: bold;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .teacher-login-btn {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .teacher-login-btn:hover {
+            background: var(--card-border);
+            color: var(--text);
+        }
+
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            color: var(--text-muted);
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #0f172a;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.4s ease;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            background: #0f172a;
+            border: 2px solid var(--card-border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1.05rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.95;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary {
+            background: #475569;
+            box-shadow: none;
+        }
+
+        .game-card {
+            background: #0f172a;
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .room-title {
+            color: var(--accent);
+            font-size: 1.15rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .room-desc {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .option-btn {
+            background: #1e293b;
+            border: 2px solid var(--card-border);
+            color: var(--text);
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #283548;
+        }
+
+        .feedback {
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-top: 15px;
+            display: none;
+            line-height: 1.6;
+        }
+
+        .feedback.success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--success);
+            color: #34d399;
+        }
+
+        .feedback.error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid var(--danger);
+            color: #f87171;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: #0f172a;
+            border-radius: 10px;
+            overflow: hidden;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid var(--card-border);
+            text-align: center;
+        }
+
+        th {
+            background: #283548;
+            color: var(--accent);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            max-height: 350px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            padding: 25px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .app-container {
+                padding: 15px;
+            }
+            header h1 {
+                font-size: 1.2rem;
+            }
+            .teacher-login-btn {
+                position: static;
+                margin-top: 10px;
+                display: block;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header>
+        <button class="teacher-login-btn" onclick="openTeacherLogin()">ورود معلم 🔑</button>
+        <h1>🏛️ اداره آموزش و پرورش دهدز</h1>
+        <div class="meta-box">
+            <span>🎮 اتاق فرار استراتژی‌های حل مسئله (فصل ۱)</span>
+            <span>✍️ تدوین‌گران: مهدی حسینی و سمیه حسینی</span>
+        </div>
+    </header>
+
+    <div class="progress-container" id="progressContainer" style="display: none;">
+        <div class="progress-info">
+            <span id="progressText">مرحله ۱ از ۵</span>
+            <span id="progressPercent">۲۰٪</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- صفحه ورود دانش‌آموز -->
+    <div id="screen-auth" class="screen active">
+        <div class="game-card">
+            <h2 style="color: var(--accent); margin-bottom: 15px; font-size: 1.2rem;">⚔️ ورود قهرمان به اتاق فرار ریاضی</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">برای شروع ماجراجویی و ثبت نتایج در کارنامه، اطلاعات خود را وارد کنید:</p>
+            
+            <div class="form-group">
+                <label>نام:</label>
+                <input type="text" id="studentName" placeholder="مثلاً: علی">
+            </div>
+            <div class="form-group">
+                <label>نام خانوادگی:</label>
+                <input type="text" id="studentFamily" placeholder="مثلاً: محمدی">
+            </div>
+            <div class="form-group">
+                <label>کلاس:</label>
+                <input type="text" id="studentClass" placeholder="مثلاً: هفتم ۱">
+            </div>
+            <div class="form-group">
+                <label>کد ملی (برای پیگیری نتیجه):</label>
+                <input type="text" inputmode="numeric" id="studentNationalId" placeholder="۱۰ رقم بدون خط تیره...">
+            </div>
+            <button class="btn" onclick="startAdventure()">شروع بازی و ورود به درِ اول 🚀</button>
+        </div>
+    </div>
+
+    <!-- صفحه بازی -->
+    <div id="screen-game" class="screen">
+        <div class="game-card">
+            <div class="room-title" id="roomTitle"></div>
+            <p class="room-desc" id="roomDesc"></p>
+            <div class="options-grid" id="optionsContainer"></div>
+            <div id="feedback" class="feedback"></div>
+        </div>
+        <button id="nextBtn" class="btn btn-success" style="display:none;" onclick="nextStep()">عبور به مرحله بعدی ➔</button>
+    </div>
+
+    <!-- صفحه پایان -->
+    <div id="screen-finish" class="screen">
+        <div class="game-card" style="text-align: center;">
+            <h2 style="color: var(--success); margin-bottom: 15px;">🎉 تبریک! شما از تمام اتاق‌ها فرار کردید!</h2>
+            <div id="summaryReport" style="text-align: right; margin: 20px 0; font-size: 1rem; background: #1e293b; padding: 15px; border-radius: 12px; border: 1px solid var(--card-border);"></div>
+            <button class="btn btn-success" onclick="downloadResultFile()">📥 دریافت فایل نتیجه (ارسال برای معلم)</button>
+        </div>
+    </div>
+
+    <!-- پنل مدیریت معلم -->
+    <div id="screen-teacher" class="screen">
+        <div class="game-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                <h2 style="color: var(--accent); font-size: 1.2rem;">📊 پنل مدیریت معلم</h2>
+                <button class="btn btn-secondary" style="width: auto; padding: 8px 15px; margin: 0;" onclick="exitTeacherPanel()">خروج از پنل 🚪</button>
+            </div>
+            
+            <div style="margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <label class="btn btn-secondary" style="margin: 0; cursor: pointer; text-align: center; flex: 1;">
+                    📂 وارد کردن فایل‌های JSON دانش‌آموزان <input type="file" id="importFiles" multiple accept=".json" style="display: none;" onchange="importStudentResults(event)">
+                </label>
+                <button class="btn" style="margin: 0; flex: 1;" onclick="downloadAllResults()">📥 دانلود همه نتایج (JSON)</button>
+            </div>
+
+            <div class="table-responsive">
+                <table id="teacherTable">
+                    <thead>
+                        <tr>
+                            <th>نام و نام خانوادگی</th>
+                            <th>کلاس</th>
+                            <th>کد ملی</th>
+                            <th>تعداد تلاش‌ها</th>
+                            <th>وضعیت</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <button class="btn btn-secondary" onclick="clearAllData()" style="background: #991b1b; margin-top: 10px;">حذف تمام داده‌های ذخیره‌شده 🗑️</button>
+        </div>
+    </div>
+</div>
+
+<!-- پنجره رمز عبور معلم -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent); margin-bottom: 15px;">🔒 ورود معلم</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">لطفا رمز عبور مدیریت را وارد کنید:</p>
+        <input type="password" id="teacherPassInput" placeholder="رمز عبور..." style="margin-bottom: 15px;">
+        <div id="loginError" style="color: var(--danger); font-size: 0.85rem; margin-bottom: 10px; display: none;">رمز عبور اشتباه است!</div>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn" onclick="verifyTeacherPassword()">ورود</button>
+            <button class="btn btn-secondary" onclick="closeTeacherLogin()">انصراف</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const TEACHER_PASSWORD = "1234";
+
+    const questions = [
+        {
+            title: "🚪 درِ اول: مسیر مورچه (راهبرد رسم شکل)",
+            desc: "مورچه‌ای می‌خواهد از یک دیوار ۵ متری بالا برود. او در هر ثانیه ۲ متر بالا می‌آید اما ۱ متر سر می‌خورد و پایین می‌آید. این مورچه در ثانیه چندم به بالای دیوار می‌رسد؟",
+            options: ["ثانیه سوم (۳)", "ثانیه چهارم (۴)", "ثانیه پنجم (۵)", "ثانیه ششم (۶)"],
+            correctIndex: 1,
+            hint: "راهنمایی: در ثانیه چهارم، مورچه ۲ متر بالا می‌آید و به لبه ۵ متری می‌رسد و دیگر سر نمی‌خورد!"
+        },
+        {
+            title: "🚪 درِ دوم: کمد سفر (راهبرد الگوسازی)",
+            desc: "شما برای سفر ۳ رنگ کلاه (قرمز، آبی، زرد) و ۲ مدل عینک (آفتابی، طبی) دارید. چند حالت مختلف (ست لباس) بدون تکرار می‌توانید انتخاب کنید؟",
+            options: ["۵ حالت", "۶ حالت", "۹ حالت", "۱۲ حالت"],
+            correctIndex: 1,
+            hint: "راهنمایی: تعداد کلاه‌ها را در تعداد عینک‌ها ضرب کنید (۳ × ۲)."
+        },
+        {
+            title: "🚪 درِ سوم: رمز گاوصندوق (حذف حالت‌های نامطلوب)",
+            desc: "رمز گاوصندوق یک عدد ۳ رقمی است: رقم صدگان فرد است، رقم دهگان بزرگ‌تر از ۷ است، مجموع سه رقم برابر ۱۰ می‌شود، و تمام رقم‌های آن با هم متفاوت هستند. رقم یکان گاوصندوق چند است؟",
+            options: ["رقم ۱", "رقم ۲", "رقم ۵", "رقم صفر (۰)"],
+            correctIndex: 3,
+            hint: "راهنمایی: صدگان ۱ و دهگان ۹ باشد، مجموع می‌شود ۱۰ و یکان باید ۰ باشد (عدد ۱۹۰)."
+        },
+        {
+            title: "🚪 درِ چهارم: قلک پس‌انداز (راهبرد الگویابی)",
+            desc: "شما روز اول ۵ هزار تومان، روز دوم ۱۰ هزار تومان، روز سوم ۱۵ هزار تومان و... در قلک می‌اندازید. در مجموع تا پایان روز چهارم، چند هزار تومان پول توی قلک جمع کرده‌اید؟",
+            options: ["۳۰ هزار تومان", "۴۰ هزار تومان", "۵۰ هزار تومان", "۶۰ هزار تومان"],
+            correctIndex: 2,
+            hint: "راهنمایی: پول هر ۴ روز را با هم جمع کنید: (۵ + ۱۰ + ۱۵ + ۲۰)."
+        },
+        {
+            title: "🚪 درِ پنجم: مسابقات بازی آنلاین (اعداد صحیح)",
+            desc: "در یک بازی آنلاین، با هر برد ۵ امتیاز مثبت (+۵) و با هر باخت ۳ امتیاز منفی (-۳) می‌گیرید. اگر علی در طول بازی ۴ برد و ۳ باخت داشته باشد، امتیاز نهایی او چند می‌شود؟",
+            options: ["امتیاز ۱۱", "امتیاز ۲۰", "امتیاز ۷", "امتیاز ۱۵"],
+            correctIndex: 0,
+            hint: "راهنمایی: ۴ تا برد میشه ۲۰+ و ۳ تا باخت میشه ۹-. حالا این دو مقدار را با هم جمع کنید."
+        }
+    ];
+
+    let currentStep = 0;
+    let totalAttempts = 0;
+    let studentData = { name: '', family: '', className: '', nationalId: '', attempts: 0, date: '' };
+
+    function startAdventure() {
+        const name = document.getElementById('studentName').value.trim();
+        const family = document.getElementById('studentFamily').value.trim();
+        const className = document.getElementById('studentClass').value.trim();
+        const nationalId = document.getElementById('studentNationalId').value.trim();
+
+        if (!name || !family || !className || !nationalId) {
+            alert('لطفاً تمام فیلدها (نام، نام خانوادگی، کلاس و کد ملی) را به طور کامل پر کنید!');
+            return;
+        }
+
+        if (nationalId.length < 8) {
+            alert('لطفاً کد ملی معتبری وارد کنید.');
+            return;
+        }
+
+        studentData.name = name;
+        studentData.family = family;
+        studentData.className = className;
+        studentData.nationalId = nationalId;
+        studentData.date = new Date().toLocaleDateString('fa-IR');
+
+        document.getElementById('screen-auth').classList.remove('active');
+        document.getElementById('screen-game').classList.add('active');
+        document.getElementById('progressContainer').style.display = 'block';
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        const q = questions[currentStep];
+        document.getElementById('roomTitle').innerText = q.title;
+        document.getElementById('roomDesc').innerText = q.desc;
+        document.getElementById('feedback').style.display = 'none';
+
+        const container = document.getElementById('optionsContainer');
+        container.innerHTML = '';
+
+        q.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(idx);
+            container.appendChild(btn);
+        });
+
+        const progressPercent = ((currentStep) / questions.length) * 100;
+        document.getElementById('progressText').innerText = `مرحله ${currentStep + 1} از ${questions.length}`;
+        document.getElementById('progressPercent').innerText = Math.round(progressPercent) + '٪';
+        document.getElementById('progressFill').style.width = progressPercent + '%';
+    }
+
+    function checkAnswer(selectedIndex) {
+        const q = questions[currentStep];
+        const fb = document.getElementById('feedback');
+        totalAttempts++;
+
+        if (selectedIndex === q.correctIndex) {
+            fb.className = 'feedback success';
+            fb.innerText = '✨ آفرین قهرمان! پاسخ درست بود و درِ این مرحله باز شد.';
+            fb.style.display = 'block';
+
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(b => b.style.pointerEvents = 'none');
+
+            document.getElementById('nextBtn').style.display = 'block';
+        } else {
+            fb.className = 'feedback error';
+            fb.innerText = '❌ پاسخ اشتباه است! ' + q.hint;
+            fb.style.display = 'block';
+        }
+    }
+
+    function nextStep() {
+        currentStep++;
+        document.getElementById('nextBtn').style.display = 'none';
+        if (currentStep < questions.length) {
+            loadQuestion();
+        } else {
+            finishGame();
+        }
+    }
+
+    function finishGame() {
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('progressText').innerText = 'تکمیل شده!';
+        document.getElementById('progressPercent').innerText = '۱۰۰٪';
+
+        document.getElementById('screen-game').classList.remove('active');
+        document.getElementById('screen-finish').classList.add('active');
+
+        studentData.attempts = totalAttempts;
+
+        let savedResults = JSON.parse(localStorage.getItem('math_escape_results') || '[]');
+        savedResults = savedResults.filter(item => item.nationalId !== studentData.nationalId);
+        savedResults.push(studentData);
+        localStorage.setItem('math_escape_results', JSON.stringify(savedResults));
+
+        document.getElementById('summaryReport').innerHTML = `
+            <p><strong>👤 نام و نام خانوادگی:</strong> ${studentData.name} ${studentData.family}</p>
+            <p><strong>🏫 کلاس:</strong> ${studentData.className}</p>
+            <p><strong>🆔 کد ملی:</strong> ${studentData.nationalId}</p>
+            <p><strong>🎯 تعداد کل تلاش‌ها:</strong> ${totalAttempts} بار</p>
+            <p><strong>📅 تاریخ:</strong> ${studentData.date}</p>
+        `;
+    }
+
+    function downloadResultFile() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(studentData, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `نتيجه_ریاضی_${studentData.family}_${studentData.nationalId}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+    }
+
+    function openTeacherLogin() {
+        document.getElementById('loginModal').style.display = 'flex';
+        document.getElementById('teacherPassInput').value = '';
+        document.getElementById('loginError').style.display = 'none';
+    }
+
+    function closeTeacherLogin() {
+        document.getElementById('loginModal').style.display = 'none';
+    }
+
+    function verifyTeacherPassword() {
+        const pass = document.getElementById('teacherPassInput').value;
+        if (pass === TEACHER_PASSWORD) {
+            closeTeacherLogin();
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('screen-teacher').classList.add('active');
+            renderTeacherTable();
+        } else {
+            document.getElementById('loginError').style.display = 'block';
+        }
+    }
+
+    function exitTeacherPanel() {
+        document.getElementById('screen-teacher').classList.remove('active');
+        document.getElementById('screen-auth').classList.add('active');
+    }
+
+    function renderTeacherTable() {
+        const results = JSON.parse(localStorage.getItem('math_escape_results') || '[]');
+        const tbody = document.querySelector('#teacherTable tbody');
+        tbody.innerHTML = '';
+
+        if (results.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="color: var(--text-muted);">هنوز هیچ نتیجه‌ای ثبت نشده است.</td></tr>';
+            return;
+        }
+
+        results.forEach(res => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${res.name} ${res.family}</td>
+                    <td>${res.className}</td>
+                    <td>${res.nationalId}</td>
+                    <td>${res.attempts}</td>
+                    <td><span style="color: var(--success); font-weight: bold;">تکمیل‌شده 🏆</span></td>
+                </tr>
+            `;
+        });
+    }
+
+    function importStudentResults(event) {
+        const files = event.target.files;
+        if (!files.length) return;
+
+        let savedResults = JSON.parse(localStorage.getItem('math_escape_results') || '[]');
+
+        for (let file of files) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.nationalId && data.name) {
+                        savedResults = savedResults.filter(item => item.nationalId !== data.nationalId);
+                        savedResults.push(data);
+                        localStorage.setItem('math_escape_results', JSON.stringify(savedResults));
+                        renderTeacherTable();
+                    }
+                } catch (err) {
+                    console.error("خطا در خواندن فایل JSON", err);
+                }
+            };
+            reader.readAsText(file);
+        }
+        alert(`فایل‌ها با موفقیت بررسی و بارگذاری شدند!`);
+    }
+
+    function downloadAllResults() {
+        const results = localStorage.getItem('math_escape_results') || '[]';
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(results);
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `تمام_نتایج_کلاس_ریاضی.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+    }
+
+    function clearAllData() {
+        if (confirm('آیا مطمئن هستید که می‌خواهید تمام نتایج ذخیره‌شده را پاک کنید؟')) {
+            localStorage.removeItem('math_escape_results');
+            renderTeacherTable();
+        }
+    }
+</script>
+
+</body>
+</html>
